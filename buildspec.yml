@@ -2,4 +2,8 @@ version: 0.2
 phases:
   build:
     commands:
-      - ./build.sh
+      - docker compose run --no-deps web rails new . --force --database=postgresql
+      - sudo chown -R $USER:$USER .
+      - docker compose build
+      - rm config/database.yml
+      - cp database.yml config/database.yml
