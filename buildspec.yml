@@ -1,9 +1,25 @@
 version: 0.2
 phases:
+  pre_build:
+    commands:
+      - echo Verifying Environment
+      - echo "AWS_DEFAULT_REGION is $AWS_DEFAULT_REGION"
+      - echo "AWS_ACCOUNT_ID is $AWS_ACCOUNT_ID"
+      - echo "IMAGE_TAG is $IMAGE_TAG"
+      - echo "IMAGE_REPO_NAME is $IMAGE_REPO_NAME"
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
   build:
     commands:
+      - echo Build started on `date`
+      - echo Building the Docker image..
       - docker-compose run --no-deps web rails new . --force --database=postgresql
       - sudo chown -R $USER:$USER .
       - docker-compose build
       - rm config/database.yml
       - cp database.yml config/database.yml
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
