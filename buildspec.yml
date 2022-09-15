@@ -18,6 +18,7 @@ phases:
       - docker-compose build
       - rm config/database.yml
       - cp database.yml config/database.yml
+      - docker-compose ps
   post_build:
     commands:
       - echo Build completed on `date`
