@@ -18,7 +18,7 @@ phases:
       - docker-compose build
       - rm config/database.yml
       - cp database.yml config/database.yml
-      - docker-compose up
+      - docker-compose up -d
       - docker-compose ps
       - docker-compose down
       - docker-compose ps
