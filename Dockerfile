@@ -2,13 +2,13 @@
 FROM ruby:2.5 AS builder
 RUN apt-get update -qq && apt-get install -y nodejs postgresql-client
 WORKDIR /myapp
-COPY Gemfile /myapp/Gemfile
-COPY Gemfile.lock /myapp/Gemfile.lock
+COPY /myapp/ /myapp/
 RUN bundle install
 
-# Multi-stage build
+# Multi-stage build step
 FROM ruby:2.5
 COPY --from=builder /usr/local/bundle/ /usr/local/bundle/
+COPY --from=builder /myapp/ /myapp/
 COPY database.yml /myapp/config/database.yml
 
 # Add a script to be executed every time the container starts.
@@ -18,3 +18,4 @@ ENTRYPOINT ["entrypoint.sh"]
 EXPOSE 3000
 
 CMD ["rails", "server", "-b", "0.0.0.0"]
+
