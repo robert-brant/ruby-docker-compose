@@ -14,6 +14,7 @@ phases:
       - echo Build started on `date`
       - echo Building the Docker image..
       - docker-compose run --no-deps web rails new ./myapp --force --database=postgresql
+      - ls -la
       - sudo chown -R $USER:$USER ./myapp
       - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG . 
 
