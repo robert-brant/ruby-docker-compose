@@ -2,4 +2,4 @@ version: 0.2
 phases:
   build:
     commands:
-      - docker compose
+      - docker-compose run --no-deps web rails new . --force --database=postgresql
