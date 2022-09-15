@@ -8,7 +8,7 @@ RUN bundle install
 
 # Multi-stage build
 FROM ruby:2.5
-COPY --from=builder /usr/local/bundle/ /usr/local/bundle
+COPY --from=builder /usr/local/bundle/ /usr/local/bundle/
 COPY database.yml /myapp/config/database.yml
 
 # Add a script to be executed every time the container starts.
